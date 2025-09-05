@@ -154,8 +154,9 @@ public class AuthService : IAuthService
                 return interactive.AccessToken;
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine($"[Auth] AcquireToken failed for scopes [{string.Join(' ', scopes)}]: {ex.Message}");
             return null;
         }
     }

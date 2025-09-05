@@ -13,9 +13,11 @@ Top‑level layout:
     - `App.axaml` / `App.axaml.cs` — App resources/bootstrap; reads env vars and wires services
     - `Program.cs` — Avalonia bootstrapping (UsePlatformDetect, Inter font, logging)
     - `Services/`
-      - `AuthService.cs` — MSAL.NET auth: token cache, Windows WAM, macOS system web, logging
+  - `AuthService.cs` — MSAL.NET auth: token cache, Windows WAM, macOS system web, logging
+  - `KeyVaultService.cs` — Azure Key Vault secrets (RBAC via Azure SDK)
+  - `KeyVaultCredential.cs` — Bridges MSAL tokens to Azure SDK TokenCredential
     - `ViewModels/`
-      - `MainWindowViewModel.cs` — Greeting from time service; Sign in/out commands and state
+  - `MainWindowViewModel.cs` — Greeting, Sign in/out; Key Vault list/reveal/edit with READ/WRITE modes
       - `ViewModelBase.cs` — ObservableObject base
     - `Views/`
       - `MainWindow.axaml` / `.cs` — Main UI with Sign in/out and UPN display
@@ -23,6 +25,7 @@ Top‑level layout:
   - `AzKview.Core/` — Core abstractions and services (UI‑free)
     - `Services/`
       - `IAuthService.cs` — Auth abstraction (UPN, state, events, token acquisition)
+  - `IKeyVaultService.cs` — Key Vault abstraction (list, get, set secrets)
       - `TimeService.cs` — Time provider (UTC now) for testability
   - `AzKview.UI/` — Placeholder for reusable UI components
 - `tests/`
@@ -59,6 +62,29 @@ export AZURE_AD_LOG_MSAL=true
 export AZURE_AD_LOG_PII=false
 dotnet run --project src/AzKview.App/AzKview.App.csproj
 ```
+
+## Key Vault (RBAC)
+
+The app integrates with Azure Key Vault for secrets using RBAC and the Azure SDK. It uses your interactive sign-in (no access keys).
+
+Set this environment variable before launching the app. There’s no built-in default; if not set, Key Vault features are inactive.
+
+- `AZURE_KEY_VAULT_URI` — Your vault URI, e.g. `https://kv.vault.azure.net/`
+
+Example (macOS zsh, using the provided test vault):
+
+```sh
+export AZURE_KEY_VAULT_URI="https://kv.vault.azure.net/"
+dotnet run --project src/AzKview.App
+```
+
+Features:
+- READ mode: List secrets (metadata) and “Reveal” value on demand.
+- WRITE mode: Toggle “Write mode” to enable “Edit” per-secret (updates value, creates a new version).
+
+RBAC Required Roles:
+- Read: Key Vault Secrets User
+- Write: Key Vault Secrets Officer (or higher)
 
 ## Build, run, and test
 

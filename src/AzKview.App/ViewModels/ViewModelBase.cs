@@ -5,3 +5,5 @@ namespace AzKview.App.ViewModels;
 public class ViewModelBase : ObservableObject
 {
 }
+
+// ...existing code...

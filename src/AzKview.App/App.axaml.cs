@@ -36,11 +36,26 @@ public partial class App : Application
                     .ToArray();
 
             IAuthService authService = new AuthService(clientId, tenantId, defaultScopes);
-
-            desktop.MainWindow = new MainWindow
+            // Key Vault configuration: no built-in default. Provide AZURE_KEY_VAULT_URI in your environment (e.g., via .env.local).
+            // Example: AZURE_KEY_VAULT_URI=https://kvdevplc.vault.azure.net/
+            var vaultUriEnv = Environment.GetEnvironmentVariable("AZURE_KEY_VAULT_URI");
+            MainWindowViewModel vm;
+            if (!string.IsNullOrWhiteSpace(vaultUriEnv))
             {
-                DataContext = new MainWindowViewModel(new TimeService(), authService),
-            };
+                var vaultUri = new Uri(vaultUriEnv);
+                var credential = new KeyVaultCredential(authService);
+                var kvService = new KeyVaultService(vaultUri, credential);
+                vm = new MainWindowViewModel(new TimeService(), authService, kvService);
+            }
+            else
+            {
+                // If not set, Key Vault features will remain inactive (NullKeyVaultService in VM).
+                vm = new MainWindowViewModel(new TimeService(), authService);
+            }
+
+            desktop.MainWindow = new MainWindow { DataContext = vm };
+            // Fire-and-forget init to refresh KV on startup (handles auth silently or interactively when needed)
+            _ = vm.InitializeAsync();
         }
 
         base.OnFrameworkInitializationCompleted();

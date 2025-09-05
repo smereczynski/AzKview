@@ -1,13 +1,25 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:AzKview.App.ViewModels"
+    xmlns:vm="using:AzKview.App.ViewModels"
+    xmlns:conv="using:AzKview.App.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AzKview.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AzKview.App">
+    Title="AzKview.App">
+
+    <Window.Resources>
+        <conv:BooleanToEditSaveConverter x:Key="BoolToEditSave" />
+    <conv:InverseBooleanConverter x:Key="InverseBool" />
+    <conv:StringMaskConverter x:Key="StringMask" />
+    <conv:BooleanToRevealHideConverter x:Key="BoolToRevealHide" />
+    <conv:BoolFalseToBlueGrayBrushConverter x:Key="BoolFalseToBlueGrayBrush" />
+    <conv:BoolToBlueGrayBrushConverter x:Key="BoolToBlueGrayBrush" />
+    <conv:BoolToRedGrayBrushConverter x:Key="BoolToRedGrayBrush" />
+    <conv:BoolToRedBlueBrushConverter x:Key="BoolToRedBlueBrush" />
+    </Window.Resources>
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -22,6 +34,72 @@
             <Button Content="Sign out" Command="{Binding SignOutCommand}"/>
         </StackPanel>
         <TextBlock Text="{Binding AccountUpn, StringFormat='User: {0}'}" HorizontalAlignment="Center"/>
+
+        <Separator/>
+        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <ToggleButton
+                Content="WRITE MODE"
+                IsChecked="{Binding IsWriteMode, Mode=TwoWay}"
+                Background="{Binding IsWriteMode, Converter={StaticResource BoolToRedBlueBrush}}"
+                Foreground="White"
+                Padding="12,6"
+                VerticalAlignment="Center"/>
+            <Button Content="Refresh secrets" Command="{Binding RefreshSecretsCommand}"/>
+        </StackPanel>
+
+    <ItemsControl ItemsSource="{Binding Secrets}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="8" Margin="0,4" BorderBrush="Gray" BorderThickness="1">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                <Button Content="{Binding IsRevealed, Converter={StaticResource BoolToRevealHide}}" Command="{Binding RevealCommand}"/>
+                                <Button Content="{Binding IsEditing, Converter={StaticResource BoolToEditSave}}" Command="{Binding EditCommand}"/>
+                                <!-- Enabled indicator -->
+                                <CheckBox IsChecked="{Binding Enabled}" IsEnabled="False" Content="Enabled"/>
+                            </StackPanel>
+                            <!-- Input always visible, aligned left; masked overlay shown on top when not revealed -->
+                            <Border Width="400"
+                                    HorizontalAlignment="Left"
+                                    BorderBrush="#DDDDDD"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="4"
+                                    Background="{DynamicResource ThemeBackgroundBrush}">
+                                <Grid>
+                                    <!-- Editable textbox: always visible; disabled for hit testing when masked -->
+                                    <TextBox Text="{Binding Value, Mode=TwoWay}"
+                                             IsReadOnly="{Binding IsEditing, Converter={StaticResource InverseBool}}"
+                                             IsHitTestVisible="{Binding IsMasked, Converter={StaticResource InverseBool}}"/>
+                                    <!-- Masked dots overlay (not editable) -->
+                                    <TextBlock Text="{Binding Value, Converter={StaticResource StringMask}}"
+                                               IsVisible="{Binding IsMasked}"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                            <TextBlock Text="{Binding ContentType, StringFormat='ContentType: {0}'}"/>
+                            <TextBlock Text="{Binding UpdatedOn, StringFormat='Updated: {0:O}'}"/>
+                            <TextBlock Text="{Binding NotBefore, StringFormat='Activation: {0:O}'}"/>
+                            <TextBlock Text="{Binding ExpiresOn, StringFormat='Expiration: {0:O}'}"/>
+                            <!-- Tags list -->
+                            <ItemsControl ItemsSource="{Binding Tags}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <Run Text="Tag: "/>
+                                            <Run Text="{Binding Key}"/>
+                                            <Run Text=": "/>
+                                            <Run Text="{Binding Value}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </StackPanel>
 
 </Window>
