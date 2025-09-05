@@ -27,7 +27,13 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             var clientId = Environment.GetEnvironmentVariable("AZURE_AD_CLIENT_ID") ?? "YOUR_CLIENT_ID";
             var tenantId = Environment.GetEnvironmentVariable("AZURE_AD_TENANT_ID") ?? "common";
-            var defaultScopes = new[] { "User.Read" };
+            var scopesEnv = Environment.GetEnvironmentVariable("AZURE_AD_SCOPES");
+            var defaultScopes = string.IsNullOrWhiteSpace(scopesEnv)
+                ? new[] { "User.Read" }
+                : scopesEnv
+                    .Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .ToArray();
 
             IAuthService authService = new AuthService(clientId, tenantId, defaultScopes);
 

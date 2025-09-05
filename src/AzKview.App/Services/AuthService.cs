@@ -34,6 +34,22 @@ public class AuthService : IAuthService
             builder = builder.WithBroker(new BrokerOptions(BrokerOptions.OperatingSystems.Windows));
         }
 
+        // Optional MSAL logging controlled by environment variables
+        var enableMsalLogging = (Environment.GetEnvironmentVariable("AZURE_AD_LOG_MSAL") ?? "false").Equals("true", StringComparison.OrdinalIgnoreCase);
+        var enablePii = (Environment.GetEnvironmentVariable("AZURE_AD_LOG_PII") ?? "false").Equals("true", StringComparison.OrdinalIgnoreCase);
+        if (enableMsalLogging)
+        {
+            builder = builder.WithLogging((level, message, containsPii) =>
+            {
+                // Write to console; VS Code Debug Console will show this when running
+                var tag = containsPii ? "[MSAL-PII]" : "[MSAL]";
+                Console.WriteLine($"{tag} {level}: {message}");
+            },
+            LogLevel.Verbose,
+            enablePii,
+            enableDefaultPlatformLogging: false);
+        }
+
         _pca = builder.Build();
 
         // Cross-platform secure token cache

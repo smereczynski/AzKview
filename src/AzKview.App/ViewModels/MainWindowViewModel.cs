@@ -18,6 +18,8 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             OnPropertyChanged(nameof(IsAuthenticated));
             OnPropertyChanged(nameof(AccountUpn));
+            (SignInCommand as IRelayCommand)?.NotifyCanExecuteChanged();
+            (SignOutCommand as IRelayCommand)?.NotifyCanExecuteChanged();
         };
     }
 
@@ -26,20 +28,28 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsAuthenticated => _authService.IsAuthenticated;
     public string? AccountUpn => _authService.AccountUpn;
 
-    [RelayCommand]
+    private bool CanSignIn() => !_authService.IsAuthenticated;
+
+    [RelayCommand(CanExecute = nameof(CanSignIn))]
     private async Task SignInAsync()
     {
         await _authService.SignInAsync();
         OnPropertyChanged(nameof(IsAuthenticated));
         OnPropertyChanged(nameof(AccountUpn));
+        (SignInCommand as IRelayCommand)?.NotifyCanExecuteChanged();
+        (SignOutCommand as IRelayCommand)?.NotifyCanExecuteChanged();
     }
 
-    [RelayCommand]
+    private bool CanSignOut() => _authService.IsAuthenticated;
+
+    [RelayCommand(CanExecute = nameof(CanSignOut))]
     private async Task SignOutAsync()
     {
         await _authService.SignOutAsync();
         OnPropertyChanged(nameof(IsAuthenticated));
         OnPropertyChanged(nameof(AccountUpn));
+        (SignInCommand as IRelayCommand)?.NotifyCanExecuteChanged();
+        (SignOutCommand as IRelayCommand)?.NotifyCanExecuteChanged();
     }
 }
 

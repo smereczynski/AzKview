@@ -18,8 +18,8 @@
     <StackPanel Spacing="12" Margin="16">
         <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center"/>
         <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-            <Button Content="Sign in" Command="{Binding SignInCommand}" IsEnabled="{Binding IsAuthenticated, ConverterParameter=False}"/>
-            <Button Content="Sign out" Command="{Binding SignOutCommand}" IsEnabled="{Binding IsAuthenticated}"/>
+            <Button Content="Sign in" Command="{Binding SignInCommand}"/>
+            <Button Content="Sign out" Command="{Binding SignOutCommand}"/>
         </StackPanel>
         <TextBlock Text="{Binding AccountUpn, StringFormat='User: {0}'}" HorizontalAlignment="Center"/>
     </StackPanel>
