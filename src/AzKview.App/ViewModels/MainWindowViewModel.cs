@@ -49,6 +49,16 @@ file sealed class NullAuthService : IAuthService
     public bool IsAuthenticated => false;
     public event EventHandler<bool>? AuthenticationStateChanged;
     public Task<string?> AcquireTokenAsync(string[] scopes) => Task.FromResult<string?>(null);
-    public Task<bool> SignInAsync() => Task.FromResult(false);
-    public Task SignOutAsync() => Task.CompletedTask;
+    public Task<bool> SignInAsync()
+    {
+        // Notify listeners even though auth state doesn't change in the null implementation.
+        AuthenticationStateChanged?.Invoke(this, IsAuthenticated);
+        return Task.FromResult(false);
+    }
+    public Task SignOutAsync()
+    {
+        // Notify listeners to indicate an attempted sign-out occurred.
+        AuthenticationStateChanged?.Invoke(this, IsAuthenticated);
+        return Task.CompletedTask;
+    }
 }
