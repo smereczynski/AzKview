@@ -1,5 +1,7 @@
 # AzKview
 
+[![CI](https://github.com/smereczynski/AzKview/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/smereczynski/AzKview/actions/workflows/ci.yml)
+
 Cross-platform Avalonia UI application (net9.0) using MVVM and clean solution structure.
 
 ## Structure
