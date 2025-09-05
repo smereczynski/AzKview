@@ -26,6 +26,12 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
           cache: true
 
+      - name: .NET info
+        run: dotnet --info
+
+      - name: List installed SDKs
+        run: dotnet --list-sdks
+
       - name: Restore
         run: dotnet restore AzKview.sln
 
