@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AzKview.Core\AzKview.Core.csproj" />
+  <ProjectReference Include="../../src/AzKview.Core/AzKview.Core.csproj" />
+  <ProjectReference Include="../../src/AzKview.App/AzKview.App.csproj" />
   </ItemGroup>
 
 </Project>
