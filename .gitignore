@@ -95,7 +95,10 @@ packages/
 
 # Azure DevOps / CI
 /.azure/
-/.github/
+# Ignore .github contents by default, except workflows
+/.github/*
+!/.github/workflows/
+!/.github/workflows/**
 
 # Env
 .env
