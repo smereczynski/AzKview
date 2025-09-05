@@ -1,0 +1,46 @@
+root = true
+
+# C# code style
+[*.cs]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+
+# Analyzer severity defaults
+# Keep style suggestions as suggestions (not warnings) during build.
+dotnet_analyzer_diagnostic.category-Style.severity = suggestion
+dotnet_analyzer_diagnostic.category-Documentation.severity = suggestion
+dotnet_analyzer_diagnostic.category-Performance.severity = suggestion
+dotnet_analyzer_diagnostic.category-Design.severity = suggestion
+dotnet_analyzer_diagnostic.category-Usage.severity = suggestion
+
+# Specific rules tuning to avoid noisy warnings
+dotnet_diagnostic.IDE0160.severity = suggestion   # namespace style
+dotnet_diagnostic.IDE0008.severity = suggestion   # explicit type
+dotnet_diagnostic.IDE0022.severity = suggestion   # expression-bodied members
+dotnet_diagnostic.IDE0040.severity = suggestion   # accessibility modifiers
+dotnet_diagnostic.IDE0011.severity = suggestion   # add braces
+dotnet_diagnostic.IDE0046.severity = suggestion   # conditional simplification
+dotnet_diagnostic.IDE0055.severity = suggestion   # formatting
+dotnet_diagnostic.IDE0058.severity = suggestion   # unused expression value
+dotnet_diagnostic.IDE0290.severity = suggestion   # primary constructor
+dotnet_diagnostic.CA1822.severity = suggestion    # mark members static
+
+# Naming rules
+dotnet_naming_rule.private_fields_should_be_camel_case.severity = suggestion
+(dotnet_naming_rule.private_fields_should_be_camel_case.symbols) = private_fields
+(dotnet_naming_rule.private_fields_should_be_camel_case.style) = camel_case_style
+
+(dotnet_naming_symbols.private_fields.applicable_kinds) = field
+(dotnet_naming_symbols.private_fields.applicable_accessibilities) = private
+
+(dotnet_naming_style.camel_case_style.capitalization) = camel_case
+
+# Files
+[*.{cs,axaml,xaml}]
+end_of_line = lf
+
+# Tests: allow underscores in test method names
+[tests/**/*.cs]
+dotnet_diagnostic.CA1707.severity = none

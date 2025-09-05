@@ -1,0 +1,102 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Rider / IntelliJ
+.idea/
+*.iml
+
+# Visual Studio / Build output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Tt]est[Rr]esult*/
+*.user
+*.suo
+*.cache
+*.csproj.user
+*.rsuser
+*.vsp
+*.vspscc
+
+# Visual Studio working folder
+.vs/
+
+# NuGet
+*.nupkg
+packages/
+# except build/restore artifacts should not be committed
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Coverage / test artifacts
+coverage*
+*.coverage
+*.coveragexml
+*.trx
+
+# Resharper / dotCover
+_ReSharper*/
+*.DotSettings.user
+
+# Build systems
+*.pidb
+*.svclog
+
+# Logs
+*.log
+
+# Avalonia/Skia cache
+*.skia.cache
+
+# Local environment files
+*.env
+*.env.local
+
+# OS / misc
+Thumbs.db
+ehthumbs.db
+
+# Rider solution cache
+.sln.iml
+# .NET
+bin/
+obj/
+[Bb]uild/
+[Ll]ogs/
+TestResults/
+*.user
+*.suo
+*.cache
+*.ide/
+*.swp
+*.DS_Store
+
+# Rider/VS Code
+.idea/
+.vscode/
+
+# Avalonia
+*.axaml.cs~
+
+# Packages
+*.nupkg
+.nuget/
+packages/
+
+# Azure DevOps / CI
+/.azure/
+/.github/
+
+# Env
+.env
+secrets.json

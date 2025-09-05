@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <Deterministic>true</Deterministic>
+    <WarningsAsMessages>NU1903;NU1902;NU1901</WarningsAsMessages>
+  <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include=".editorconfig" />
+  </ItemGroup>
+</Project>

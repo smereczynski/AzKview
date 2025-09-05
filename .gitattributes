@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.cs diff=csharp
+*.axaml linguist-language=XML
+* text=auto eol=lf
+*.sln text eol=crlf
+*.bat text eol=crlf
